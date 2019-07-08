@@ -30,6 +30,7 @@ namespace hesanta.AI.GA.SimpleGeneticAlgorithm
             iterationBoundingBox = new Point(4, setupBoundingBox.Y + 5);
             detailsBoundingBox = new Point(4, iterationBoundingBox.Y + 10);
 
+            WriteSetup();
             this.RegisterEvents();
         }
 
