@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 
-namespace hesanta.AI.GA.SimpleGeneticAlgorithm
+namespace Sample
 {
     class Program
     {

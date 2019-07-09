@@ -1,12 +1,14 @@
 ﻿using hesanta.AI.GA.Application;
 using hesanta.AI.GA.Domain;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Text;
+using TrueColorConsole;
 
-namespace hesanta.AI.GA.SimpleGeneticAlgorithm
+namespace Sample
 {
     public class ConsoleVisualizacionService<TGene> where TGene : IGene
     {
@@ -14,11 +16,12 @@ namespace hesanta.AI.GA.SimpleGeneticAlgorithm
         private readonly Stopwatch stopWatch = new Stopwatch();
         private Point setupBoundingBox;
         private Point iterationBoundingBox;
-        private Point detailsBoundingBox;
+        private Point solutionBoundingBox;
 
         public ConsoleVisualizacionService(IGeneticAlgorithmService<TGene> geneticAlgorithmService)
         {
             this.service = geneticAlgorithmService;
+            VTConsole.Enable();
         }
 
         public void InitializeConsole()
@@ -26,9 +29,9 @@ namespace hesanta.AI.GA.SimpleGeneticAlgorithm
             Console.CursorVisible = false;
             var setupTemplate = this.setupTemplate();
             setupBoundingBox = setupTemplate.Item2;
-            Console.Write(setupTemplate.Item1);
+            VTConsole.Write(setupTemplate.Item1, Color.WhiteSmoke);
             iterationBoundingBox = new Point(4, setupBoundingBox.Y + 5);
-            detailsBoundingBox = new Point(4, iterationBoundingBox.Y + 10);
+            solutionBoundingBox = new Point(0, iterationBoundingBox.Y + 5);
 
             WriteSetup();
             this.RegisterEvents();
@@ -77,24 +80,42 @@ namespace hesanta.AI.GA.SimpleGeneticAlgorithm
             int topPosition = iterationBoundingBox.Y;
 
             Console.SetCursorPosition(leftMargin, topPosition++);
-            Console.Write($"Elapsed time        [{(decimal)stopWatch.ElapsedMilliseconds / 1000}s]");
+            Console.Write($"Elapsed time            [{(decimal)stopWatch.ElapsedMilliseconds / 1000}s]");
 
             Console.SetCursorPosition(leftMargin, topPosition++);
-            Console.Write($"Current iteration   [{currentIteration}]");
+            Console.Write($"Current iteration       [{currentIteration}]");
 
             Console.SetCursorPosition(leftMargin, topPosition++);
-            Console.Write($"Solution found      [");
-            Console.ForegroundColor = service.GeneticAlgorithm.ThereIsSolution ? ConsoleColor.Green : ConsoleColor.Red;
-            Console.Write($"{ service.GeneticAlgorithm.ThereIsSolution}");
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.Write("]");
+            Console.Write($"Exact solution found    [");
+            Color color = service.GeneticAlgorithm.ThereIsSolution ? Color.Green : Color.Red;
+            VTConsole.Write($"{ service.GeneticAlgorithm.ThereIsSolution}", color);
+            VTConsole.Write("]", Color.WhiteSmoke);
+
+            WriteBestSolution();
+        }
+
+        private void WriteBestSolution()
+        {
+            int leftMargin = solutionBoundingBox.X;
+            int topPosition = solutionBoundingBox.Y;
 
             Console.SetCursorPosition(leftMargin, topPosition++);
-            Console.Write($"Best solution       [");
-            Console.ForegroundColor = ConsoleColorRtoG(service.GeneticAlgorithm.BestChromosome.Fitness);
-            Console.Write(Math.Round(service.GeneticAlgorithm.BestChromosome.Fitness, 4));
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.Write($"]-[{service.GeneticAlgorithm.BestChromosome.Chromosome}]");
+
+            string toWrite = "BEST SOLUTION";
+            string centerString = new string(' ', Console.WindowWidth / 2 - toWrite.Length / 2);
+            VTConsole.Write($"{centerString}BEST SOLUTION{centerString}", Color.WhiteSmoke);
+
+            Color color = ConsoleColorRtoG(service.GeneticAlgorithm.BestChromosome.Fitness);
+            toWrite = $"[{Math.Round(service.GeneticAlgorithm.BestChromosome.Fitness, 4)}]";
+            centerString = new string(' ', Console.WindowWidth / 2 - toWrite.ToString().Length / 2);
+            VTConsole.Write($"{centerString}{toWrite}{centerString}", color);
+
+            toWrite = $"[{service.GeneticAlgorithm.BestChromosome.Chromosome}]";
+            if (toWrite.ToString().Length < Console.WindowWidth)
+                centerString = new string(' ', Console.WindowWidth / 2 - toWrite.ToString().Length / 2);
+            else
+                centerString = "";
+            VTConsole.Write($"{centerString}{toWrite}{centerString}", Color.WhiteSmoke);
         }
 
         private (string, Point) setupTemplate()
@@ -110,13 +131,16 @@ namespace hesanta.AI.GA.SimpleGeneticAlgorithm
 ", new Point(23, 4));
         }
 
-        private ConsoleColor ConsoleColorRtoG(decimal percentage)
+        private Color ConsoleColorRtoG(decimal percentage)
         {
-            List<ConsoleColor> colors = new List<ConsoleColor> { ConsoleColor.Red, ConsoleColor.DarkRed, ConsoleColor.DarkMagenta, ConsoleColor.DarkYellow, ConsoleColor.Gray, ConsoleColor.DarkCyan, ConsoleColor.DarkGreen, ConsoleColor.Green };
+            var colorFrom = Color.Red;
+            var colorTo = Color.Green;
 
-            int indexColor = ((int)(percentage * 100)) * (colors.Count - 1) / 100;
+            var r = colorFrom.R + (int)((colorTo.R - colorFrom.R) * percentage);
+            var g = colorFrom.G + (int)((colorTo.G - colorFrom.G) * percentage);
+            var b = colorFrom.B + (int)((colorTo.B - colorFrom.B) * percentage);
 
-            return colors[indexColor];
+            return Color.FromArgb(r, g, b);
         }
 
     }
