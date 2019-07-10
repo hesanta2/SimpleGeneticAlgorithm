@@ -20,8 +20,6 @@ namespace Sample
             var console = new ConsoleVisualizacionService<GeneChar>(service);
             console.InitializeConsole();
 
-            Console.ReadKey();
-
             service.GetIterateSolution(maxIterations: 1000);
 
             Console.CursorVisible = true;

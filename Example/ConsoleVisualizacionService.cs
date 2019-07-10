@@ -87,7 +87,7 @@ namespace Sample
 
             Console.SetCursorPosition(leftMargin, topPosition++);
             Console.Write($"Exact solution found    [");
-            Color color = service.GeneticAlgorithm.ThereIsSolution ? Color.Green : Color.Red;
+            Color color = service.GeneticAlgorithm.ThereIsSolution ? Color.FromArgb(84, 255, 0) : Color.Red;
             VTConsole.Write($"{ service.GeneticAlgorithm.ThereIsSolution}", color);
             VTConsole.Write("]", Color.WhiteSmoke);
 
@@ -134,7 +134,7 @@ namespace Sample
         private Color ConsoleColorRtoG(decimal percentage)
         {
             var colorFrom = Color.Red;
-            var colorTo = Color.Green;
+            var colorTo = Color.FromArgb(84, 255, 0);
 
             var r = colorFrom.R + (int)((colorTo.R - colorFrom.R) * percentage);
             var g = colorFrom.G + (int)((colorTo.G - colorFrom.G) * percentage);
