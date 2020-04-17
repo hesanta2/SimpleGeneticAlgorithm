@@ -1,6 +1,6 @@
-﻿using System;
+﻿using hesanta.AI.GA.Domain;
+using System;
 using System.Collections.Generic;
-using hesanta.AI.GA.Domain;
 
 namespace hesanta.AI.GA.Application
 {

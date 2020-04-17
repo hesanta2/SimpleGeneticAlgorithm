@@ -1,11 +1,7 @@
-﻿using hesanta.AI.GA.Application;
-using hesanta.AI.GA.Domain;
+﻿using hesanta.AI.GA.Domain;
 using System;
-using System.Linq;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Text;
 using TrueColorConsole;
 
 namespace hesanta.AI.GA.Application

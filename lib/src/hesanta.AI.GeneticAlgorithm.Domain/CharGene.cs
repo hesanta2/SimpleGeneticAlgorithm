@@ -1,22 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
 
 namespace hesanta.AI.GA.Domain
 {
-    public class IntGene : IGene
+    public class CharGene : IGene
     {
         private static Random random = new Random((int)DateTime.Today.Ticks);
-        private int maxRandomValue = 100;
 
-        public string Value { get; protected set; } = "2";
+        public string Value { get; protected set; } = " ";
 
-        public IntGene() { }
+        public CharGene() { }
 
         public void Randomize()
         {
-            this.Value = random.Next(2, maxRandomValue).ToString();
+            this.Value = ((char)random.Next(32, 255)).ToString();
         }
 
         public override string ToString()
@@ -36,15 +33,14 @@ namespace hesanta.AI.GA.Domain
 
         public void Mutate()
         {
-            int randomValue = 2;
-            while (randomValue.ToString() == this.Value)
-                randomValue = random.Next(2, maxRandomValue);
-            this.Value = randomValue.ToString();
+            var value = this.Value;
+            while (value == this.Value)
+                this.Randomize();
         }
 
         public object Clone()
         {
-            var clone = new IntGene();
+            var clone = new CharGene();
             clone.Value = this.Value;
 
             return clone;

@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
-using hesanta.AI.GA.Domain;
-using Microsoft.Extensions.Logging;
+﻿using hesanta.AI.GA.Domain;
+using System;
 
 namespace hesanta.AI.GA.Application
 {

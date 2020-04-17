@@ -1,11 +1,6 @@
 ﻿using hesanta.AI.GA.Application;
 using hesanta.AI.GA.Domain;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
 
 namespace Sample
 {

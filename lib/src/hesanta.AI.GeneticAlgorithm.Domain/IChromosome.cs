@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace hesanta.AI.GA.Domain
 {
-    public interface IChromosome<TGene> : ICloneable 
+    public interface IChromosome<TGene> : ICloneable
         where TGene : IGene
     {
         List<TGene> Genes { get; }

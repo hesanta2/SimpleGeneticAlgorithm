@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\hesanta.AI.GeneticAlgorithm.Application\hesanta.AI.GA.Application.csproj" />
-    <ProjectReference Include="..\hesanta.AI.GeneticAlgorithm.Domain\hesanta.AI.GA.Domain.csproj" />
+    <ProjectReference Include="..\..\lib\src\hesanta.AI.GeneticAlgorithm.Application\hesanta.AI.GA.Application.csproj" />
+    <ProjectReference Include="..\..\lib\src\hesanta.AI.GeneticAlgorithm.Domain\hesanta.AI.GA.Domain.csproj" />
   </ItemGroup>
 
 </Project>
