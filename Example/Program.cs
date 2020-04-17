@@ -13,11 +13,11 @@ namespace Sample
     {
         static void Main(string[] args)
         {
-            IFitnessFunction<GeneChar> fitness = new GeneCharFitnessFunction();
-            IGeneticAlgorithm<GeneChar> algorithm = new GeneticAlgorithm<GeneChar>(300, GeneCharFitnessFunction.FitnesSentence.Length, fitness);
-            IGeneticAlgorithmService<GeneChar> service = new GeneticAlgorithmService<GeneChar>(algorithm);
+            IFitnessFunction<CharGene> fitness = new GeneCharFitnessFunction();
+            IGeneticAlgorithm<CharGene> algorithm = new GeneticAlgorithm<CharGene>(300, GeneCharFitnessFunction.FitnesSentence.Length, fitness);
+            IGeneticAlgorithmService<CharGene> service = new GeneticAlgorithmService<CharGene>(algorithm);
 
-            var console = new ConsoleVisualizacionService<GeneChar>(service);
+            var console = new ConsoleVisualizacionService<CharGene>(service);
             console.InitializeConsole();
 
             service.GetIterateSolution(maxIterations: 1000);
@@ -27,10 +27,10 @@ namespace Sample
             Console.ReadKey();
         }
 
-        private class GeneCharFitnessFunction : IFitnessFunction<GeneChar>
+        private class GeneCharFitnessFunction : IFitnessFunction<CharGene>
         {
             public static string FitnesSentence = "There is a example for calculate a multiple chars that are conforming a sentencense using a super GENETIC ALGORITHM!!!";
-            public decimal GetFitness(IChromosome<GeneChar> chromosome)
+            public decimal GetFitness(IChromosome<CharGene> chromosome)
             {
                 decimal fitness = 0;
                 int genesNumber = chromosome.Genes.Count;

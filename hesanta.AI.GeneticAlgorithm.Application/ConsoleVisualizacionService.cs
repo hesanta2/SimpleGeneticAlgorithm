@@ -8,7 +8,7 @@ using System.Drawing;
 using System.Text;
 using TrueColorConsole;
 
-namespace Sample
+namespace hesanta.AI.GA.Application
 {
     public class ConsoleVisualizacionService<TGene> where TGene : IGene
     {
@@ -27,7 +27,7 @@ namespace Sample
         public void InitializeConsole()
         {
             Console.CursorVisible = false;
-            var setupTemplate = this.setupTemplate();
+            var setupTemplate = this.SetupTemplate();
             setupBoundingBox = setupTemplate.Item2;
             VTConsole.Write(setupTemplate.Item1, Color.WhiteSmoke);
             iterationBoundingBox = new Point(4, setupBoundingBox.Y + 5);
@@ -118,7 +118,7 @@ namespace Sample
             VTConsole.Write($"{centerString}{toWrite}{centerString}", Color.WhiteSmoke);
         }
 
-        private (string, Point) setupTemplate()
+        private (string, Point) SetupTemplate()
         {
             return ($@"
     ╔═══════════════════════════╗

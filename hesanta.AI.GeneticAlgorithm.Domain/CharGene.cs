@@ -5,17 +5,17 @@ using System.Text;
 
 namespace hesanta.AI.GA.Domain
 {
-    public class GeneBit : IGene
+    public class CharGene : IGene
     {
         private static Random random = new Random((int)DateTime.Today.Ticks);
 
-        public string Value { get; protected set; } = "0";
+        public string Value { get; protected set; } = " ";
 
-        public GeneBit() { }
+        public CharGene() { }
 
         public void Randomize()
         {
-            this.Value = random.Next(2).ToString();
+            this.Value = ((char)random.Next(32, 255)).ToString();
         }
 
         public override string ToString()
@@ -35,12 +35,14 @@ namespace hesanta.AI.GA.Domain
 
         public void Mutate()
         {
-            this.Value = this.Value == "0" ? "1" : "0";
+            var value = this.Value;
+            while (value == this.Value)
+                this.Randomize();
         }
 
         public object Clone()
         {
-            var clone = new GeneBit();
+            var clone = new CharGene();
             clone.Value = this.Value;
 
             return clone;

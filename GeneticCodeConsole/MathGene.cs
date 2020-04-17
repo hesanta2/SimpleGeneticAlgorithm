@@ -1,0 +1,67 @@
+﻿using hesanta.AI.GA.Domain;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace GeneticCodeConsole
+{
+    public class MathGene : IGene
+    {
+        private static readonly Random random = new Random((int)DateTime.Today.Ticks);
+
+        public enum MathType { Add = 0, Sub = 1, Mult = 2, Div = 3 }
+        public MathType Type { get; private set; }
+
+        public string Value => Type.ToString();
+
+        public decimal MathValue { get; internal set; }
+
+        public object Clone()
+        {
+            return new MathGene { Type = Type, MathValue = MathValue };
+        }
+
+        public void Mutate()
+        {
+            this.Type = (MathType)random.Next(4);
+            MathValue = random.Next(500);
+        }
+
+        public void Randomize()
+        {
+            Type = (MathType)random.Next(4);
+            MathValue = random.Next(500);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Type == ((MathGene)obj).Type;
+        }
+
+        public override int GetHashCode()
+        {
+            return Type.GetHashCode() + Value.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return $"{Enum.GetName(Type.GetType(), Type)}({MathValue})";
+        }
+
+        public decimal Operate(decimal result)
+        {
+            switch (Type)
+            {
+                case MathType.Add:
+                    return result += MathValue;
+                case MathType.Sub:
+                    return result -= MathValue;
+                case MathType.Mult:
+                    return result *= MathValue;
+                case MathType.Div:
+                    return (long)(MathValue == 0 ? result /= 0.1M : result /= MathValue);
+                default: return result;
+            }
+        }
+    }
+}
