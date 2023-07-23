@@ -4,20 +4,20 @@ using System.Collections.Generic;
 
 namespace hesanta.AI.GA.Application
 {
-    public interface IGeneticAlgorithm<TGene>
-        where TGene : IGene
+    public interface IGeneticAlgorithm<T>
+        where T : IGene
     {
-        event EventHandler<IChromosome<TGene>> OnInitializePopulationChromosome;
-        event EventHandler<(IChromosome<TGene>, IChromosome<TGene>)> OnNextPopulationSelectParents;
-        event EventHandler<(IChromosome<TGene>, IChromosome<TGene>)> OnNextPopulationParentsRecombination;
-        event EventHandler<(IChromosome<TGene>, IChromosome<TGene>)> OnNextPopulationCreateChildren;
+        event EventHandler<IChromosome<T>> OnInitializePopulationChromosome;
+        event EventHandler<(IChromosome<T>, IChromosome<T>)> OnNextPopulationSelectParents;
+        event EventHandler<(IChromosome<T>, IChromosome<T>)> OnNextPopulationParentsRecombination;
+        event EventHandler<(IChromosome<T>, IChromosome<T>)> OnNextPopulationCreateChildren;
 
-        ICollection<IChromosome<TGene>> Chromosomes { get; }
-        IFitnessChromosome<TGene> BestChromosome { get; }
+        ICollection<IChromosome<T>> Chromosomes { get; }
+        IFitnessChromosome<T> BestChromosome { get; }
         int PopulationNumber { get; }
         bool ThereIsSolution { get; }
         int CurrentIteration { get; }
-        ICollection<IFitnessChromosome<TGene>> FitnessChromosomes { get; }
+        ICollection<IFitnessChromosome<T>> FitnessChromosomes { get; }
         int GensPerChromosome { get; }
 
         void InitializePopulation();

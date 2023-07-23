@@ -3,29 +3,27 @@ using System;
 
 namespace GeneticCodeConsole
 {
-    public class MathGene : IGene
+    public class MathGene : Gene<object>
     {
         private static readonly Random random = new Random((int)DateTime.Today.Ticks);
 
         public enum MathType { Add = 0, Sub = 1, Mult = 2, Div = 3 }
         public MathType Type { get; private set; }
 
-        public string Value => Type.ToString();
-
         public decimal MathValue { get; internal set; }
 
-        public object Clone()
+        public override object Clone()
         {
             return new MathGene { Type = Type, MathValue = MathValue };
         }
 
-        public void Mutate()
+        public override void Mutate()
         {
-            this.Type = (MathType)random.Next(4);
+            Type = (MathType)random.Next(4);
             MathValue = random.Next(500);
         }
 
-        public void Randomize()
+        public override void Randomize()
         {
             Type = (MathType)random.Next(4);
             MathValue = random.Next(500);

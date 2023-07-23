@@ -2,13 +2,13 @@
 
 namespace hesanta.AI.GA.Domain
 {
-    public class FitnessChromosome<TGene> : IFitnessChromosome<TGene>
-        where TGene : IGene
+    public class FitnessChromosome<T> : IFitnessChromosome<T>
+        where T : IGene
     {
         public decimal Fitness { get; }
-        public IChromosome<TGene> Chromosome { get; }
+        public IChromosome<T> Chromosome { get; }
 
-        public FitnessChromosome(decimal fitness, IChromosome<TGene> chromosome)
+        public FitnessChromosome(decimal fitness, IChromosome<T> chromosome)
         {
             Fitness = fitness;
             Chromosome = chromosome;
@@ -16,7 +16,7 @@ namespace hesanta.AI.GA.Domain
 
         public override bool Equals(object obj)
         {
-            var fitnessChromosome = obj as FitnessChromosome<TGene>;
+            var fitnessChromosome = obj as FitnessChromosome<T>;
 
             if (fitnessChromosome == null) return false;
 
@@ -35,7 +35,7 @@ namespace hesanta.AI.GA.Domain
         {
             var hashCode = 1979341316;
             hashCode = hashCode * -1521134295 + Fitness.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<IChromosome<TGene>>.Default.GetHashCode(Chromosome);
+            hashCode = hashCode * -1521134295 + EqualityComparer<IChromosome<T>>.Default.GetHashCode(Chromosome);
             return hashCode;
         }
     }

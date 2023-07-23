@@ -1,8 +1,8 @@
 ﻿namespace hesanta.AI.GA.Domain
 {
-    public interface IFitnessFunction<TGene>
-        where TGene : IGene
+    public interface IFitnessFunction<T>
+        where T : IGene
     {
-        decimal GetFitness(IChromosome<TGene> chromosome);
+        decimal GetFitness(IChromosome<T> chromosome);
     }
 }

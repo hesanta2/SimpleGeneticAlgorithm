@@ -1,49 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace hesanta.AI.GA.Domain
 {
-    public class CharGene : IGene
+    public class CharGene : Gene<char>
     {
         private static Random random = new Random((int)DateTime.Today.Ticks);
 
-        public string Value { get; protected set; } = " ";
 
-        public CharGene() { }
-
-        public void Randomize()
+        public CharGene()
         {
-            this.Value = ((char)random.Next(32, 255)).ToString();
+            Value = ' ';
+        }
+        public CharGene(char value)
+        {
+            Value = value;
         }
 
-        public override string ToString()
+        public override void Randomize()
         {
-            return this.Value.ToString();
+            Value = ((char)random.Next(32, 255));
         }
 
-        public override bool Equals(object obj)
+        public override void Mutate()
         {
-            return obj.ToString().Equals(Value);
+            var value = Value;
+            while (value == Value)
+            {
+                Randomize();
+            }
         }
 
-        public override int GetHashCode()
+        public override object Clone()
         {
-            return -1937169414 + EqualityComparer<string>.Default.GetHashCode(Value);
-        }
-
-        public void Mutate()
-        {
-            var value = this.Value;
-            while (value == this.Value)
-                this.Randomize();
-        }
-
-        public object Clone()
-        {
-            var clone = new CharGene();
-            clone.Value = this.Value;
-
-            return clone;
+            return new CharGene(Value);
         }
     }
 }

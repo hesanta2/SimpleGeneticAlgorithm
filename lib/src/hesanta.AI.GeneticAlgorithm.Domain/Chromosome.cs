@@ -3,30 +3,31 @@ using System.Collections.Generic;
 
 namespace hesanta.AI.GA.Domain
 {
-    public class Chromosome<TGene> : IChromosome<TGene> where TGene : IGene
+    public class Chromosome<T> : IChromosome<T>
+        where T : IGene
     {
-        public List<TGene> Genes { get; } = new List<TGene>();
+        public List<T> Genes { get; } = new List<T>();
         public int NumberOfGens { get; }
 
         public Chromosome(int numberOfGens)
         {
             NumberOfGens = numberOfGens;
-            this.InitializeGens();
+            InitializeGens();
         }
 
 
         private void InitializeGens()
         {
-            for (int i = 0; i < this.NumberOfGens; i++)
+            for (int i = 0; i < NumberOfGens; i++)
             {
-                var gen = Activator.CreateInstance<TGene>();
-                this.Genes.Add(gen);
+                var gen = Activator.CreateInstance<T>();
+                Genes.Add(gen);
             }
         }
 
         public void Randomize()
         {
-            foreach (var gen in this.Genes)
+            foreach (var gen in Genes)
             {
                 gen.Randomize();
             }
@@ -34,14 +35,14 @@ namespace hesanta.AI.GA.Domain
 
         public override bool Equals(object obj)
         {
-            var chromosome = obj as Chromosome<TGene>;
+            var chromosome = obj as IChromosome<T>;
 
             if (chromosome == null) return false;
-            if (this.Genes.Count != chromosome.Genes.Count) return false;
+            if (Genes.Count != chromosome.Genes.Count) return false;
 
-            for (int i = 0; i < this.Genes.Count; i++)
+            for (int i = 0; i < Genes.Count; i++)
             {
-                var gene = this.Genes[i];
+                var gene = Genes[i];
                 var compareGene = chromosome.Genes[i];
                 if (gene.Equals(compareGene)) return false;
             }
@@ -49,27 +50,27 @@ namespace hesanta.AI.GA.Domain
             return true;
         }
 
-        public void Recombine(IChromosome<TGene> chromosomeToRecombine)
+        public void Recombine(IChromosome<T> chromosomeToRecombine)
         {
-            if (this.Genes.Count != chromosomeToRecombine.Genes.Count) throw new InvalidOperationException($"Chromosomes used for recombination must has the same size. {this} = {chromosomeToRecombine}");
+            if (Genes.Count != chromosomeToRecombine.Genes.Count) throw new InvalidOperationException($"Chromosomes used for recombination must has the same size. {this} = {chromosomeToRecombine}");
 
-            int halfCount = this.Genes.Count / 2;
+            int halfCount = Genes.Count / 2;
 
-            for (int i = halfCount + 1; i < this.Genes.Count; i++)
+            for (int i = halfCount + 1; i < Genes.Count; i++)
             {
-                var gene1 = this.Genes[i];
+                var gene1 = Genes[i];
                 var gene2 = chromosomeToRecombine.Genes[i];
                 if (i > halfCount)
                 {
                     chromosomeToRecombine.Genes[i] = gene1;
-                    this.Genes[i] = (TGene)gene2;
+                    Genes[i] = gene2;
                 }
             }
         }
 
-        public IChromosome<TGene> Mutate()
+        public IChromosome<T> Mutate()
         {
-            var mutation = Clone() as IChromosome<TGene>;
+            var mutation = Clone() as IChromosome<T>;
             var random = new Random((int)DateTime.Now.Ticks);
 
             int index = random.Next(mutation.Genes.Count);
@@ -81,7 +82,7 @@ namespace hesanta.AI.GA.Domain
 
         public override string ToString()
         {
-            return $"[{string.Join(", ", this.Genes)}]";
+            return $"[{string.Join(", ", Genes)}]";
         }
 
         public override int GetHashCode()
@@ -97,11 +98,11 @@ namespace hesanta.AI.GA.Domain
 
         public object Clone()
         {
-            var clone = new Chromosome<TGene>(this.NumberOfGens);
-            for (int i = 0; i < this.Genes.Count; i++)
+            var clone = new Chromosome<T>(NumberOfGens);
+            for (int i = 0; i < Genes.Count; i++)
             {
-                var gene = this.Genes[i];
-                clone.Genes[i] = (TGene)(gene.Clone() as IGene);
+                var gene = Genes[i];
+                clone.Genes[i] = (T)gene.Clone();
             }
 
             return clone;

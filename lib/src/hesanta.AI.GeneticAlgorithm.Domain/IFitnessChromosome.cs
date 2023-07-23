@@ -1,9 +1,9 @@
 ﻿namespace hesanta.AI.GA.Domain
 {
-    public interface IFitnessChromosome<TGene>
-        where TGene : IGene
+    public interface IFitnessChromosome<T>
+        where T : IGene
     {
-        IChromosome<TGene> Chromosome { get; }
+        IChromosome<T> Chromosome { get; }
         decimal Fitness { get; }
     }
 }

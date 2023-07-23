@@ -3,46 +3,46 @@ using System;
 
 namespace hesanta.AI.GA.Application
 {
-    public class GeneticAlgorithmService<TGene> : IGeneticAlgorithmService<TGene>
-        where TGene : IGene
+    public class GeneticAlgorithmService<T> : IGeneticAlgorithmService<T>
+        where T : IGene
     {
         public int MaxIterations { get; private set; }
         public event EventHandler OnStart;
-        public event EventHandler<IFitnessChromosome<TGene>> OnFinish;
+        public event EventHandler<IFitnessChromosome<T>> OnFinish;
         public event EventHandler<int> OnIterate;
         public event EventHandler OnStartIterations;
 
-        public IGeneticAlgorithm<TGene> GeneticAlgorithm { get; }
+        public IGeneticAlgorithm<T> GeneticAlgorithm { get; }
         public bool ThereIsSolution { get; private set; }
 
-        public GeneticAlgorithmService(IGeneticAlgorithm<TGene> geneticAlgorithm)
+        public GeneticAlgorithmService(IGeneticAlgorithm<T> geneticAlgorithm)
         {
             GeneticAlgorithm = geneticAlgorithm;
         }
 
-        public IFitnessChromosome<TGene> GetIterateSolution(int maxIterations = 100)
+        public IFitnessChromosome<T> GetIterateSolution(int maxIterations = 100)
         {
-            this.MaxIterations = maxIterations;
+            MaxIterations = maxIterations;
 
-            this.OnStart?.Invoke(this, EventArgs.Empty);
+            OnStart?.Invoke(this, EventArgs.Empty);
 
-            this.GeneticAlgorithm.InitializePopulation();
+            GeneticAlgorithm.InitializePopulation();
 
-            this.GeneticAlgorithm.EvaluateFitness();
+            GeneticAlgorithm.EvaluateFitness();
 
-            this.OnStartIterations?.Invoke(this, EventArgs.Empty);
+            OnStartIterations?.Invoke(this, EventArgs.Empty);
 
-            while (!this.GeneticAlgorithm.ThereIsSolution && this.GeneticAlgorithm.CurrentIteration < maxIterations)
+            while (!GeneticAlgorithm.ThereIsSolution && GeneticAlgorithm.CurrentIteration < maxIterations)
             {
-                this.GeneticAlgorithm.GetNextPopulation();
-                this.GeneticAlgorithm.EvaluateFitness();
+                GeneticAlgorithm.GetNextPopulation();
+                GeneticAlgorithm.EvaluateFitness();
 
-                this.OnIterate?.Invoke(this, this.GeneticAlgorithm.CurrentIteration);
+                OnIterate?.Invoke(this, GeneticAlgorithm.CurrentIteration);
             }
 
-            this.OnFinish?.Invoke(this, this.GeneticAlgorithm.BestChromosome);
+            OnFinish?.Invoke(this, GeneticAlgorithm.BestChromosome);
 
-            return this.GeneticAlgorithm.BestChromosome;
+            return GeneticAlgorithm.BestChromosome;
         }
     }
 }

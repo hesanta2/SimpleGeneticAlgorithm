@@ -3,15 +3,15 @@ using System.Collections.Generic;
 
 namespace hesanta.AI.GA.Domain
 {
-    public interface IChromosome<TGene> : ICloneable
-        where TGene : IGene
+    public interface IChromosome<T> : ICloneable
+        where T : IGene
     {
-        List<TGene> Genes { get; }
-        void Recombine(IChromosome<TGene> chromosomeToRecombine);
+        List<T> Genes { get; }
+        void Recombine(IChromosome<T> chromosomeToRecombine);
 
         void Randomize();
         string ToString();
-        IChromosome<TGene> Mutate();
+        IChromosome<T> Mutate();
         bool Equals(object obj);
         int GetHashCode();
     }

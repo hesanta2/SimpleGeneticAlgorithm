@@ -1,51 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace hesanta.AI.GA.Domain
 {
-    public class IntGene : IGene
+    public class IntGene : Gene<int>
     {
         private static Random random = new Random((int)DateTime.Today.Ticks);
         private int maxRandomValue = 100;
 
-        public string Value { get; protected set; } = "2";
-
-        public IntGene() { }
-
-        public void Randomize()
+        public IntGene(int initialValue = 2)
         {
-            this.Value = random.Next(2, maxRandomValue).ToString();
+            Value = initialValue;
         }
 
-        public override string ToString()
+        public override void Randomize()
         {
-            return this.Value.ToString();
+            Value = random.Next(2, maxRandomValue);
         }
 
-        public override bool Equals(object obj)
-        {
-            return obj.ToString().Equals(Value);
-        }
-
-        public override int GetHashCode()
-        {
-            return -1937169414 + EqualityComparer<string>.Default.GetHashCode(Value);
-        }
-
-        public void Mutate()
+        public override void Mutate()
         {
             int randomValue = 2;
-            while (randomValue.ToString() == this.Value)
+            while (randomValue == Value)
                 randomValue = random.Next(2, maxRandomValue);
-            this.Value = randomValue.ToString();
+            Value = randomValue;
         }
 
-        public object Clone()
+        public override object Clone()
         {
-            var clone = new IntGene();
-            clone.Value = this.Value;
-
-            return clone;
+            return new IntGene(Value);
         }
     }
 }

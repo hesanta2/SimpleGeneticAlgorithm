@@ -6,56 +6,57 @@ using TrueColorConsole;
 
 namespace hesanta.AI.GA.Application
 {
-    public class ConsoleVisualizacionService<TGene> where TGene : IGene
+    public class ConsoleVisualizacionService<T>
+        where T : IGene
     {
-        private readonly IGeneticAlgorithmService<TGene> service;
+        private readonly IGeneticAlgorithmService<T> service;
         private readonly Stopwatch stopWatch = new Stopwatch();
         private Point setupBoundingBox;
         private Point iterationBoundingBox;
         private Point solutionBoundingBox;
 
-        public ConsoleVisualizacionService(IGeneticAlgorithmService<TGene> geneticAlgorithmService)
+        public ConsoleVisualizacionService(IGeneticAlgorithmService<T> geneticAlgorithmService)
         {
-            this.service = geneticAlgorithmService;
+            service = geneticAlgorithmService;
             VTConsole.Enable();
         }
 
         public void InitializeConsole()
         {
             Console.CursorVisible = false;
-            var setupTemplate = this.SetupTemplate();
+            var setupTemplate = SetupTemplate();
             setupBoundingBox = setupTemplate.Item2;
             VTConsole.Write(setupTemplate.Item1, Color.WhiteSmoke);
             iterationBoundingBox = new Point(4, setupBoundingBox.Y + 5);
             solutionBoundingBox = new Point(0, iterationBoundingBox.Y + 5);
 
             WriteSetup();
-            this.RegisterEvents();
+            RegisterEvents();
         }
 
         private void RegisterEvents()
         {
-            this.service.OnStart += (s, e) =>
+            service.OnStart += (s, e) =>
             {
-                this.stopWatch.Start();
+                stopWatch.Start();
                 WriteSetup();
             };
 
-            this.service.OnStartIterations += (s, e) =>
+            service.OnStartIterations += (s, e) =>
             {
-                WriteIteration(this.service.GeneticAlgorithm.CurrentIteration);
+                WriteIteration(service.GeneticAlgorithm.CurrentIteration);
             };
 
-            this.service.OnIterate += (s, currentIteration) =>
+            service.OnIterate += (s, currentIteration) =>
             {
                 //if (stopWatch.ElapsedMilliseconds % 1000 < 700 && !service.ThereIsSolution) return;
 
-                WriteIteration(this.service.GeneticAlgorithm.CurrentIteration);
+                WriteIteration(service.GeneticAlgorithm.CurrentIteration);
             };
 
-            this.service.OnFinish += (s, solution) =>
+            service.OnFinish += (s, solution) =>
             {
-                WriteIteration(this.service.GeneticAlgorithm.CurrentIteration);
+                WriteIteration(service.GeneticAlgorithm.CurrentIteration);
                 stopWatch.Stop();
             };
         }
@@ -84,7 +85,7 @@ namespace hesanta.AI.GA.Application
             Console.SetCursorPosition(leftMargin, topPosition++);
             Console.Write($"Exact solution found    [");
             Color color = service.GeneticAlgorithm.ThereIsSolution ? Color.FromArgb(84, 255, 0) : Color.Red;
-            VTConsole.Write($"{ service.GeneticAlgorithm.ThereIsSolution}", color);
+            VTConsole.Write($"{service.GeneticAlgorithm.ThereIsSolution}", color);
             VTConsole.Write("]", Color.WhiteSmoke);
 
             WriteBestSolution();
