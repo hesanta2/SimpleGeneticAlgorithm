@@ -7,58 +7,21 @@ namespace GeneticCodeConsole
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            IGeneticAlgorithm<NutritionGene> algorithm = new GeneticAlgorithm<NutritionGene>(100, 4, GetFitness, error: 0.00000000001M);
-            IGeneticAlgorithmService<NutritionGene> service = new GeneticAlgorithmService<NutritionGene>(algorithm);
-            GetSolution(service);
+            IGeneticAlgorithm<NutritionGene> algorithm = new GeneticAlgorithm<NutritionGene>(100, 4, EvalFitness, error: 0.00000000001M);
+            IGeneticAlgorithmProcessor<NutritionGene> processor = new GeneticAlgorithmProcessor<NutritionGene>(algorithm);
 
-            /*var results = new List<IFitnessChromosome<NutritionGene>>();
-            var iterations = 100;
-            for (int i = 0; i < iterations; i++)
-            {
-                IFitnessFunction<NutritionGene> fi = new GeneCharFitnessFunction();
-                IGeneticAlgorithm<NutritionGene> a = new GeneticAlgorithm<NutritionGene>(100, GeneCharFitnessFunction.TotalGens, fi, error: 0.00000000001M);
-                IGeneticAlgorithmService<NutritionGene> s = new GeneticAlgorithmService<NutritionGene>(a);
-                var result = GetSolution(s);
-                results.Add(result);
-            }
-
-            double c = 0, g = 0, p = 0, f = 0;
-            results.ForEach(r =>
-            {
-                c += r.Chromosome.Genes[0].Factor;
-                g += r.Chromosome.Genes[1].Factor;
-                p += r.Chromosome.Genes[2].Factor;
-                f += r.Chromosome.Genes[3].Factor;
-            });
-
-            Console.WriteLine(c / iterations);
-            Console.WriteLine(g / iterations);
-            Console.WriteLine(p / iterations);
-            Console.WriteLine(f / iterations);*/
+            var console = new ConsoleVisualizacionService<NutritionGene>(processor);
+            console.InitializeConsole();
+            processor.GetIterateSolution(maxIterations: 10000);
 
             Console.CursorVisible = true;
             Console.SetCursorPosition(0, Console.WindowHeight - 4);
             Console.ReadKey();
         }
 
-        private static IFitnessChromosome<NutritionGene> GetSolution(IGeneticAlgorithmService<NutritionGene> service)
-        {
-            var console = new ConsoleVisualizacionService<NutritionGene>(service);
-            console.InitializeConsole();
-
-            service.GetIterateSolution(maxIterations: 10000);
-
-            return service.GeneticAlgorithm.BestChromosome;
-        }
-
-        public static int TotalGens => 4;
-
-        private int fitnessResult1 = 16;
-        private int fitnessResult2 = 24;
-
-        public static decimal GetFitness(IChromosome<NutritionGene> chromosome)
+        private static decimal EvalFitness(IChromosome<NutritionGene> chromosome)
         {
             decimal fitness = 0;
             var geneCarbohidrates = chromosome.Genes[0];

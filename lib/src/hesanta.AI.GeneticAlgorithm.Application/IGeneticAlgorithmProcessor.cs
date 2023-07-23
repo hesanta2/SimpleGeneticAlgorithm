@@ -3,7 +3,7 @@ using System;
 
 namespace hesanta.AI.GA.Application
 {
-    public interface IGeneticAlgorithmService<T>
+    public interface IGeneticAlgorithmProcessor<T>
         where T : IGene
     {
         event EventHandler OnStart;

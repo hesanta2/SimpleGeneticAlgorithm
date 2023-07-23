@@ -3,7 +3,7 @@ using System;
 
 namespace hesanta.AI.GA.Application
 {
-    public class GeneticAlgorithmService<T> : IGeneticAlgorithmService<T>
+    public class GeneticAlgorithmProcessor<T> : IGeneticAlgorithmProcessor<T>
         where T : IGene
     {
         public int MaxIterations { get; private set; }
@@ -15,7 +15,7 @@ namespace hesanta.AI.GA.Application
         public IGeneticAlgorithm<T> GeneticAlgorithm { get; }
         public bool ThereIsSolution { get; private set; }
 
-        public GeneticAlgorithmService(IGeneticAlgorithm<T> geneticAlgorithm)
+        public GeneticAlgorithmProcessor(IGeneticAlgorithm<T> geneticAlgorithm)
         {
             GeneticAlgorithm = geneticAlgorithm;
         }

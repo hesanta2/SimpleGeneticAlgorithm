@@ -9,15 +9,17 @@ namespace hesanta.AI.GA.Application
     public class ConsoleVisualizacionService<T>
         where T : IGene
     {
-        private readonly IGeneticAlgorithmService<T> service;
+        private readonly IGeneticAlgorithmProcessor<T> service;
+        private readonly Func<IChromosome<T>, string> chromosomeToString;
         private readonly Stopwatch stopWatch = new Stopwatch();
         private Point setupBoundingBox;
         private Point iterationBoundingBox;
         private Point solutionBoundingBox;
 
-        public ConsoleVisualizacionService(IGeneticAlgorithmService<T> geneticAlgorithmService)
+        public ConsoleVisualizacionService(IGeneticAlgorithmProcessor<T> geneticAlgorithmService, Func<IChromosome<T>, string> chromosomeToString = null)
         {
             service = geneticAlgorithmService;
+            this.chromosomeToString = chromosomeToString;
             VTConsole.Enable();
         }
 
@@ -104,15 +106,26 @@ namespace hesanta.AI.GA.Application
 
             Color color = ConsoleColorRtoG(service.GeneticAlgorithm.BestChromosome.Fitness);
             toWrite = $"[{Math.Round(service.GeneticAlgorithm.BestChromosome.Fitness, 4)}]";
-            centerString = new string(' ', Console.WindowWidth / 2 - toWrite.ToString().Length / 2);
-            VTConsole.Write($"{centerString}{toWrite}{centerString}", color);
+            WriteCentered(toWrite, color);
 
-            toWrite = $"[{service.GeneticAlgorithm.BestChromosome.Chromosome}]";
+            var bestSolutionChromosome = service.GeneticAlgorithm.BestChromosome.Chromosome;
+            toWrite = $"{(chromosomeToString == null ? bestSolutionChromosome.ToString() : chromosomeToString(bestSolutionChromosome))}";
+            WriteCentered("");
+            WriteCentered(toWrite);
+        }
+
+        private void WriteCentered(string toWrite, Color? color = null)
+        {
+            string centerString;
             if (toWrite.ToString().Length < Console.WindowWidth)
+            {
                 centerString = new string(' ', Console.WindowWidth / 2 - toWrite.ToString().Length / 2);
+            }
             else
+            {
                 centerString = "";
-            VTConsole.Write($"{centerString}{toWrite}{centerString}", Color.WhiteSmoke);
+            }
+            VTConsole.Write($"{centerString}{toWrite}{centerString}", color ?? Color.WhiteSmoke );
         }
 
         private (string, Point) SetupTemplate()

@@ -20,7 +20,7 @@ namespace hesanta.AI.GA.Domain
 
             if (fitnessChromosome == null) return false;
 
-            if (this.Fitness != fitnessChromosome.Fitness || this.Chromosome.Equals(fitnessChromosome.Chromosome))
+            if (Fitness != fitnessChromosome.Fitness || Chromosome.Equals(fitnessChromosome.Chromosome))
                 return false;
 
             return true;
