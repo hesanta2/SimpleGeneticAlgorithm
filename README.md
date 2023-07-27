@@ -20,6 +20,6 @@ In the `Example` directory, there's a detailed sample application of the genetic
 
 There's also a visualization that showcases how the algorithm functions. You can see it below:
 
-![Genetic Algorithm Example](./Example/GeneticAlgorithmExample.png)
+![Genetic Algorithm Example](./simple_genetic_algorithm_example.gif)
 
 This image demonstrates the algorithm's progression and how it finds solutions over time.
