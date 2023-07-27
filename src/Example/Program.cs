@@ -6,7 +6,7 @@ namespace Sample
 {
     class Program
     {
-        private static readonly string fitnesSentence = "There is an example to calculate a multiple chars conforming a sentencense using a super GENETIC ALGORITHM!!!";
+        private static readonly string fitnesSentence = "This is an example to calculate multiple characters that make up a sentence using a GENETIC ALGORITHM!!!";
 
         static void Main()
         {
@@ -34,7 +34,7 @@ namespace Sample
 
                 if (chromosome.Genes[i].Value == character)
                 {
-                    fitness += (decimal)1 / (decimal)genesNumber;
+                    fitness += (decimal)1 / genesNumber;
                 }
             }
 
