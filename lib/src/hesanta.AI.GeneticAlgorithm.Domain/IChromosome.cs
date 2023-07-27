@@ -7,7 +7,7 @@ namespace hesanta.AI.GA.Domain
         where T : IGene
     {
         List<T> Genes { get; }
-        void Recombine(IChromosome<T> chromosomeToRecombine);
+        void Crossover(IChromosome<T> chromosomeToRecombine);
 
         void Randomize();
         string ToString();

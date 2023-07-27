@@ -81,7 +81,7 @@ namespace hesanta.AI.GA.Application
 
         private void CreateChildrenPopulation(IChromosome<T> parentOne, IChromosome<T> parentTwo)
         {
-            parentOne.Recombine(parentTwo);
+            parentOne.Crossover(parentTwo);
             OnNextPopulationParentsRecombination?.Invoke(this, (parentOne, parentTwo));
 
             Chromosomes.Clear();

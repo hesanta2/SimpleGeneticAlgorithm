@@ -50,19 +50,19 @@ namespace hesanta.AI.GA.Domain
             return true;
         }
 
-        public void Recombine(IChromosome<T> chromosomeToRecombine)
+        public void Crossover(IChromosome<T> chromosome)
         {
-            if (Genes.Count != chromosomeToRecombine.Genes.Count) throw new InvalidOperationException($"Chromosomes used for recombination must has the same size. {this} = {chromosomeToRecombine}");
+            if (Genes.Count != chromosome.Genes.Count) throw new InvalidOperationException($"Chromosomes used for recombination must has the same size. {this} = {chromosome}");
 
             int halfCount = Genes.Count / 2;
 
             for (int i = halfCount + 1; i < Genes.Count; i++)
             {
                 var gene1 = Genes[i];
-                var gene2 = chromosomeToRecombine.Genes[i];
+                var gene2 = chromosome.Genes[i];
                 if (i > halfCount)
                 {
-                    chromosomeToRecombine.Genes[i] = gene1;
+                    chromosome.Genes[i] = gene1;
                     Genes[i] = gene2;
                 }
             }
