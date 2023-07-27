@@ -1,4 +1,4 @@
-# SimpleGeneticAlgorithm
+# Simple genetic algorithm
 
 SimpleGeneticAlgorithm is an implementation of a genetic algorithm in C#. Genetic algorithms are inspired by the process of natural selection, where the fittest individuals are selected for reproduction to produce the offspring of the next generation. This project aims to provide a simple, yet efficient example of how a genetic algorithm might be applied.
 
