@@ -1,20 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Colorful.Console" Version="1.2.9" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.2.0" />
-    <PackageReference Include="TrueColorConsole" Version="1.0.2" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Colorful.Console" Version="1.2.9" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.2.0" />
+		<PackageReference Include="TrueColorConsole" Version="1.0.2" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\lib\src\hesanta.AI.GeneticAlgorithm.Application\hesanta.AI.GA.Application.csproj" />
-    <ProjectReference Include="..\..\lib\src\hesanta.AI.GeneticAlgorithm.Domain\hesanta.AI.GA.Domain.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\lib\src\hesanta.AI.GeneticAlgorithm.Application\hesanta.AI.GA.Application.csproj" />
+		<ProjectReference Include="..\..\lib\src\hesanta.AI.GeneticAlgorithm.Domain\hesanta.AI.GA.Domain.csproj" />
+	</ItemGroup>
 
 </Project>
