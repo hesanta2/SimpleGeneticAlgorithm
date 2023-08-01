@@ -1,5 +1,4 @@
 ﻿using hesanta.AI.GA.Domain;
-using System;
 
 namespace hesanta.AI.GA.Application
 {

@@ -1,7 +1,4 @@
 ﻿using hesanta.AI.GA.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace hesanta.AI.GA.Application
 {
