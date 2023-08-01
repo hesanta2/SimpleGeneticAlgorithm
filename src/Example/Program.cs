@@ -1,9 +1,9 @@
 ﻿using hesanta.AI.GeneticAlgorithm;
 using hesanta.AI.GeneticAlgorithm.Chromosome;
-using hesanta.AI.GeneticAlgorithm.Gene;
 using hesanta.AI.GeneticAlgorithm.Console;
+using hesanta.AI.GeneticAlgorithm.Gene;
 
-namespace Sample
+namespace Example
 {
     class Program
     {

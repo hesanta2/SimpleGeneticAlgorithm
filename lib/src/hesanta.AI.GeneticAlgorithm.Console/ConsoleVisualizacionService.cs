@@ -1,5 +1,4 @@
-﻿using hesanta.AI.GeneticAlgorithm;
-using hesanta.AI.GeneticAlgorithm.Chromosome;
+﻿using hesanta.AI.GeneticAlgorithm.Chromosome;
 using hesanta.AI.GeneticAlgorithm.Gene;
 using System.Diagnostics;
 using System.Drawing;

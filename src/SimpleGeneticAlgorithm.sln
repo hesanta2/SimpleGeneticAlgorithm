@@ -11,9 +11,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{B2DAD80F-86D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8E0A7789-44D8-43A2-9A94-6E2F88621141}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "hesanta.AI.GeneticAlgorithm", "..\lib\src\hesanta.AI.GeneticAlgorithm.Application\hesanta.AI.GeneticAlgorithm.csproj", "{547F768A-C6D4-4B18-9CE1-B7AC2AF85748}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "hesanta.AI.GeneticAlgorithm", "..\lib\src\hesanta.AI.GeneticAlgorithm\hesanta.AI.GeneticAlgorithm.csproj", "{1102BD8C-4E2D-410B-B995-FD421365A873}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hesanta.AI.GeneticAlgorithm.Console", "..\lib\src\hesanta.AI.GeneticAlgorithm.Domain\hesanta.AI.GeneticAlgorithm.Console\hesanta.AI.GeneticAlgorithm.Console.csproj", "{BF02BF1D-84E2-42D3-9D59-E7983CC56BB3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "hesanta.AI.GeneticAlgorithm.Console", "..\lib\src\hesanta.AI.GeneticAlgorithm.Console\hesanta.AI.GeneticAlgorithm.Console.csproj", "{5E5B2197-003E-439C-8DAE-08A6EE13BE52}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,14 +25,14 @@ Global
 		{7DDF2EBE-E14A-42BA-9C22-EE445DAEEBF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7DDF2EBE-E14A-42BA-9C22-EE445DAEEBF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7DDF2EBE-E14A-42BA-9C22-EE445DAEEBF5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{547F768A-C6D4-4B18-9CE1-B7AC2AF85748}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{547F768A-C6D4-4B18-9CE1-B7AC2AF85748}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{547F768A-C6D4-4B18-9CE1-B7AC2AF85748}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{547F768A-C6D4-4B18-9CE1-B7AC2AF85748}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BF02BF1D-84E2-42D3-9D59-E7983CC56BB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BF02BF1D-84E2-42D3-9D59-E7983CC56BB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BF02BF1D-84E2-42D3-9D59-E7983CC56BB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BF02BF1D-84E2-42D3-9D59-E7983CC56BB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1102BD8C-4E2D-410B-B995-FD421365A873}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1102BD8C-4E2D-410B-B995-FD421365A873}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1102BD8C-4E2D-410B-B995-FD421365A873}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1102BD8C-4E2D-410B-B995-FD421365A873}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E5B2197-003E-439C-8DAE-08A6EE13BE52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E5B2197-003E-439C-8DAE-08A6EE13BE52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E5B2197-003E-439C-8DAE-08A6EE13BE52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E5B2197-003E-439C-8DAE-08A6EE13BE52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -40,8 +40,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{7DDF2EBE-E14A-42BA-9C22-EE445DAEEBF5} = {C00870A1-A794-4141-B72C-8EBD950F3BC9}
 		{8E0A7789-44D8-43A2-9A94-6E2F88621141} = {B2DAD80F-86D7-4EEA-82B0-A811588B1D6C}
-		{547F768A-C6D4-4B18-9CE1-B7AC2AF85748} = {8E0A7789-44D8-43A2-9A94-6E2F88621141}
-		{BF02BF1D-84E2-42D3-9D59-E7983CC56BB3} = {8E0A7789-44D8-43A2-9A94-6E2F88621141}
+		{1102BD8C-4E2D-410B-B995-FD421365A873} = {8E0A7789-44D8-43A2-9A94-6E2F88621141}
+		{5E5B2197-003E-439C-8DAE-08A6EE13BE52} = {8E0A7789-44D8-43A2-9A94-6E2F88621141}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {915D255B-8642-4648-9E0F-B2C711C5E239}

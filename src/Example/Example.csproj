@@ -14,8 +14,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\lib\src\hesanta.AI.GeneticAlgorithm.Application\hesanta.AI.GeneticAlgorithm.csproj" />
-		<ProjectReference Include="..\..\lib\src\hesanta.AI.GeneticAlgorithm.Domain\hesanta.AI.GeneticAlgorithm.Console\hesanta.AI.GeneticAlgorithm.Console.csproj" />
+		<ProjectReference Include="..\..\lib\src\hesanta.AI.GeneticAlgorithm.Console\hesanta.AI.GeneticAlgorithm.Console.csproj" />
+		<ProjectReference Include="..\..\lib\src\hesanta.AI.GeneticAlgorithm\hesanta.AI.GeneticAlgorithm.csproj" />
 	</ItemGroup>
 
 </Project>
