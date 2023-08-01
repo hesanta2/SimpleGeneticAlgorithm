@@ -1,4 +1,4 @@
-﻿namespace hesanta.AI.GA.Domain
+﻿namespace hesanta.AI.GeneticAlgorithm.Gene
 {
     public class DecimalGene : Gene<decimal>
     {
@@ -34,7 +34,7 @@
         {
             var next = random.NextDouble();
 
-            return (decimal)(minValue + (next * (maxValue - minValue)));
+            return (decimal)(minValue + next * (maxValue - minValue));
         }
     }
 }

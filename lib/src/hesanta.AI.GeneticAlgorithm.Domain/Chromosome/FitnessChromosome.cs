@@ -1,4 +1,6 @@
-﻿namespace hesanta.AI.GA.Domain
+﻿using hesanta.AI.GA.Domain.Gene;
+
+namespace hesanta.AI.GA.Domain.Chromosome
 {
     public class FitnessChromosome<T> : IFitnessChromosome<T>
         where T : IGene

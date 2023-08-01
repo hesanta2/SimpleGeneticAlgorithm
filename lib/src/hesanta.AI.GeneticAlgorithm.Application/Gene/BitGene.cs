@@ -1,4 +1,4 @@
-﻿namespace hesanta.AI.GA.Domain
+﻿namespace hesanta.AI.GeneticAlgorithm.Gene
 {
     public class BitGene : Gene<bool>
     {

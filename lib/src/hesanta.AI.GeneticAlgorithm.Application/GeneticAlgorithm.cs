@@ -1,6 +1,7 @@
-﻿using hesanta.AI.GA.Domain;
+﻿using hesanta.AI.GeneticAlgorithm.Chromosome;
+using hesanta.AI.GeneticAlgorithm.Gene;
 
-namespace hesanta.AI.GA.Application
+namespace hesanta.AI.GeneticAlgorithm
 {
     public class GeneticAlgorithm<T> : IGeneticAlgorithm<T>
         where T : IGene
@@ -15,11 +16,11 @@ namespace hesanta.AI.GA.Application
         public event EventHandler<(IChromosome<T>, IChromosome<T>)> OnNextPopulationCreateChildren;
 
         public decimal Error { get; private set; }
-        public double ElitismRate { get; set; }
-        public int StaleGenerations { get; private set; } = 0;
-        public decimal BestFitness { get; private set; } = 0;
-        public int StaleGenerationThreshold { get; set; }
-        public bool ThereIsSolution { get; private set; } = false;
+        public double ElitistSelectionRate { get; set; }
+        public int NonImprovingGenerationCount { get; private set; } = 0;
+        public decimal MaxFitnessScore { get; private set; } = 0;
+        public int NonImprovingGenerationThreshold { get; set; }
+        public bool SolutionFound { get; private set; } = false;
         public int CurrentIteration { get; private set; }
         public int PopulationNumber { get; }
         public int GensPerChromosome { get; }
@@ -44,14 +45,14 @@ namespace hesanta.AI.GA.Application
             PopulationNumber = population;
             GensPerChromosome = gens;
             Error = error;
-            ElitismRate = elitismRate;
-            StaleGenerationThreshold = staleGenerationThreshold;
+            ElitistSelectionRate = elitismRate;
+            NonImprovingGenerationThreshold = staleGenerationThreshold;
             this.createChromosomeInstanceFunc = createChromosomeInstanceFunc;
             FitnessFunc = fitnessFunc;
         }
 
 
-        public void InitializePopulation()
+        public void CreateInitialPopulation()
         {
             for (int i = 0; i < PopulationNumber; i++)
             {
@@ -68,23 +69,23 @@ namespace hesanta.AI.GA.Application
             }
         }
 
-        public void EvaluateFitness()
+        public void EvaluateChromosomeFitness()
         {
             FitnessChromosomes.Clear();
             foreach (var chromosome in Chromosomes)
             {
                 var fitnessValue = FitnessFunc(chromosome);
-                if (1 - fitnessValue < Error) ThereIsSolution = true;
+                if (1 - fitnessValue < Error) SolutionFound = true;
                 var fitnessChromosome = new FitnessChromosome<T>(fitnessValue, chromosome);
                 FitnessChromosomes.Add(fitnessChromosome);
             }
 
             decimal maxFitness = FitnessChromosomes.Max(cf => cf.Fitness);
 
-            if (maxFitness > BestFitness)
+            if (maxFitness > MaxFitnessScore)
             {
-                BestFitness = maxFitness;
-                StaleGenerations = 0;
+                MaxFitnessScore = maxFitness;
+                NonImprovingGenerationCount = 0;
 
                 foreach (var chromosome in Chromosomes)
                 {
@@ -93,10 +94,10 @@ namespace hesanta.AI.GA.Application
             }
             else
             {
-                StaleGenerations++;
+                NonImprovingGenerationCount++;
             }
 
-            if (StaleGenerations % StaleGenerationThreshold == 0 && StaleGenerations > 0)
+            if (NonImprovingGenerationCount % NonImprovingGenerationThreshold == 0 && NonImprovingGenerationCount > 0)
             {
                 foreach (var chromosome in Chromosomes)
                 {
@@ -111,18 +112,18 @@ namespace hesanta.AI.GA.Application
             CurrentIteration++;
         }
 
-        public void GetNextPopulation()
+        public void CreateNextGeneration()
         {
-            var parents = SelectParents();
+            var parents = ChooseParentsForNextGeneration();
             var parentOne = parents.Item1;
             var parentTwo = parents.Item2;
 
             OnNextPopulationSelectParents?.Invoke(this, (parentOne, parentTwo));
 
             var eliteIndividuals = new List<IChromosome<T>>();
-            if (ElitismRate > 0)
+            if (ElitistSelectionRate > 0)
             {
-                int eliteCount = (int)(PopulationNumber * ElitismRate);
+                int eliteCount = (int)(PopulationNumber * ElitistSelectionRate);
                 eliteIndividuals = FitnessChromosomes
                     .OrderByDescending(fc => fc.Fitness)
                     .Take(eliteCount)
@@ -130,7 +131,7 @@ namespace hesanta.AI.GA.Application
                     .ToList();
             }
 
-            CreateChildrenPopulation(parentOne, parentTwo);
+            GenerateChildPopulationFromParents(parentOne, parentTwo);
 
             foreach (var elite in eliteIndividuals)
             {
@@ -138,7 +139,7 @@ namespace hesanta.AI.GA.Application
             }
         }
 
-        private void CreateChildrenPopulation(IChromosome<T> parentOne, IChromosome<T> parentTwo)
+        private void GenerateChildPopulationFromParents(IChromosome<T> parentOne, IChromosome<T> parentTwo)
         {
             parentOne.Crossover(parentTwo);
             OnNextPopulationParentsRecombination?.Invoke(this, (parentOne, parentTwo));
@@ -154,7 +155,7 @@ namespace hesanta.AI.GA.Application
             }
         }
 
-        private Tuple<IChromosome<T>, IChromosome<T>> SelectParents()
+        private Tuple<IChromosome<T>, IChromosome<T>> ChooseParentsForNextGeneration()
         {
             var maxFitnessValue = FitnessChromosomes.Max(cf => cf.Fitness);
             var firstParent = FitnessChromosomes.Where(cf => cf.Fitness == maxFitnessValue).First().Chromosome;

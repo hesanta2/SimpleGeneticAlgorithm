@@ -1,4 +1,4 @@
-﻿namespace hesanta.AI.GA.Domain
+﻿namespace hesanta.AI.GA.Domain.Gene
 {
     public class CharGene : Gene<char>
     {
@@ -16,7 +16,7 @@
 
         public override void Randomize()
         {
-            Value = ((char)random.Next(32, 255));
+            Value = (char)random.Next(32, 255);
         }
 
         public override void Mutate()

@@ -1,4 +1,4 @@
-﻿namespace hesanta.AI.GA.Domain
+﻿namespace hesanta.AI.GA.Domain.Gene
 {
     public class IntGene : Gene<int>
     {

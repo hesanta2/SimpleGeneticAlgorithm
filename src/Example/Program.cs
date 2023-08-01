@@ -1,5 +1,7 @@
-﻿using hesanta.AI.GA.Application;
-using hesanta.AI.GA.Domain;
+﻿using hesanta.AI.GeneticAlgorithm;
+using hesanta.AI.GeneticAlgorithm.Chromosome;
+using hesanta.AI.GeneticAlgorithm.Gene;
+using hesanta.AI.GeneticAlgorithm.Console;
 
 namespace Sample
 {
@@ -10,12 +12,12 @@ namespace Sample
         static void Main()
         {
             IGeneticAlgorithm<CharGene> algorithm = new GeneticAlgorithm<CharGene>(300, fitnesSentence.Length, EvalFitness, staleGenerationThreshold: 10);
-            IGeneticAlgorithmProcessor<CharGene> processor = new GeneticAlgorithmProcessor<CharGene>(algorithm);
+            IGeneticAlgorithmSolver<CharGene> processor = new GeneticAlgorithmSolver<CharGene>(algorithm);
 
             var console = new ConsoleVisualizacionService<CharGene>(processor, (chromosome) => $"[{string.Join("", chromosome.Genes)}]");
             console.InitializeConsole();
 
-            processor.ComputeIterativeSolutionAsync(maxIterations: 1000);
+            processor.FindSolutionAsync(maxIterations: 1000);
 
             Console.CursorVisible = true;
             Console.SetCursorPosition(0, Console.WindowHeight - 4);

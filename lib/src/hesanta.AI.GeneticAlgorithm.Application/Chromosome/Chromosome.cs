@@ -1,4 +1,6 @@
-﻿namespace hesanta.AI.GA.Domain
+﻿using hesanta.AI.GeneticAlgorithm.Gene;
+
+namespace hesanta.AI.GeneticAlgorithm.Chromosome
 {
     public class Chromosome<T> : IChromosome<T>
         where T : IGene
@@ -6,7 +8,6 @@
         private readonly Func<int, T> createInstanceFunc;
 
         public List<T> Genes { get; } = new List<T>();
-        public int NumberOfGens { get; }
         public double MutationRate
         {
             get => Genes.Any() ? Genes.First().MutationRate : 0;
@@ -18,17 +19,16 @@
             set => Genes.ForEach(x => x.MutationAmount = value);
         }
 
-        public Chromosome(int numberOfGens, Func<int, T> createInstanceFunc = null)
+        public Chromosome(int numberOfGenes, Func<int, T> createInstanceFunc = null)
         {
-            NumberOfGens = numberOfGens;
             this.createInstanceFunc = createInstanceFunc;
-            InitializeGens();
+            InitializeGenes(numberOfGenes);
         }
 
 
-        private void InitializeGens()
+        private void InitializeGenes(int numberOfGenes)
         {
-            for (int i = 0; i < NumberOfGens; i++)
+            for (int i = 0; i < numberOfGenes; i++)
             {
                 var gen = createInstanceFunc == null ? Activator.CreateInstance<T>() : createInstanceFunc(i);
                 Genes.Add(gen);
@@ -98,13 +98,13 @@
             {
                 hashCode = hashCode * -1521134295 + gene.GetHashCode();
             }
-            hashCode = hashCode * -1521134295 + NumberOfGens.GetHashCode();
+            hashCode = hashCode * -1521134295 + Genes.Count.GetHashCode();
             return hashCode;
         }
 
         public object Clone()
         {
-            var clone = new Chromosome<T>(NumberOfGens, createInstanceFunc: createInstanceFunc);
+            var clone = new Chromosome<T>(Genes.Count, createInstanceFunc: createInstanceFunc);
             for (int i = 0; i < Genes.Count; i++)
             {
                 var gene = Genes[i];
