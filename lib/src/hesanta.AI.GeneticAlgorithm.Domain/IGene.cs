@@ -1,9 +1,9 @@
-﻿using System;
-
-namespace hesanta.AI.GA.Domain
+﻿namespace hesanta.AI.GA.Domain
 {
     public abstract class Gene<T> : IGene<T>
     {
+        public virtual double MutationRate { get; set; } = 0.5;
+        public virtual double MutationAmount { get; set; } = 0.1;
         public virtual object RawValue { get; protected set; }
         public virtual T Value
         {
@@ -46,6 +46,9 @@ namespace hesanta.AI.GA.Domain
     public interface IGene : ICloneable
     {
         object RawValue { get; }
+        double MutationRate { get; set; }
+        double MutationAmount { get; set; }
+
         bool Equals(object obj);
         void Randomize();
         void Mutate();

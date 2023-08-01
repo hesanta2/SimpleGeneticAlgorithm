@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace hesanta.AI.GA.Domain
+﻿namespace hesanta.AI.GA.Domain
 {
     public class DecimalGene : Gene<decimal>
     {

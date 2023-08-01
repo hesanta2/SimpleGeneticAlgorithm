@@ -6,12 +6,25 @@ namespace hesanta.AI.GA.Domain
     public class Chromosome<T> : IChromosome<T>
         where T : IGene
     {
+        private readonly Func<int, T> createInstanceFunc;
+
         public List<T> Genes { get; } = new List<T>();
         public int NumberOfGens { get; }
+        public double MutationRate
+        {
+            get => Genes.Any() ? Genes.First().MutationRate : 0;
+            set => Genes.ForEach(x => x.MutationRate = value);
+        }
+        public double MutationAmount
+        {
+            get => Genes.Any() ? Genes.First().MutationAmount : 0;
+            set => Genes.ForEach(x => x.MutationAmount = value);
+        }
 
-        public Chromosome(int numberOfGens)
+        public Chromosome(int numberOfGens, Func<int, T> createInstanceFunc = null)
         {
             NumberOfGens = numberOfGens;
+            this.createInstanceFunc = createInstanceFunc;
             InitializeGens();
         }
 
@@ -20,7 +33,7 @@ namespace hesanta.AI.GA.Domain
         {
             for (int i = 0; i < NumberOfGens; i++)
             {
-                var gen = Activator.CreateInstance<T>();
+                var gen = createInstanceFunc == null ? Activator.CreateInstance<T>() : createInstanceFunc(i);
                 Genes.Add(gen);
             }
         }
@@ -35,9 +48,7 @@ namespace hesanta.AI.GA.Domain
 
         public override bool Equals(object obj)
         {
-            var chromosome = obj as IChromosome<T>;
-
-            if (chromosome == null) return false;
+            if (obj is not IChromosome<T> chromosome) return false;
             if (Genes.Count != chromosome.Genes.Count) return false;
 
             for (int i = 0; i < Genes.Count; i++)
@@ -52,19 +63,17 @@ namespace hesanta.AI.GA.Domain
 
         public void Crossover(IChromosome<T> chromosome)
         {
-            if (Genes.Count != chromosome.Genes.Count) throw new InvalidOperationException($"Chromosomes used for recombination must has the same size. {this} = {chromosome}");
+            if (Genes.Count != chromosome.Genes.Count) throw new InvalidOperationException($"Chromosomes used for recombination must have the same size. {this} = {chromosome}");
 
-            int halfCount = Genes.Count / 2;
+            var random = new Random();
+            int firstPoint = random.Next(Genes.Count);
+            int secondPoint = random.Next(firstPoint, Genes.Count);
 
-            for (int i = halfCount + 1; i < Genes.Count; i++)
+            for (int i = firstPoint; i < secondPoint; i++)
             {
-                var gene1 = Genes[i];
-                var gene2 = chromosome.Genes[i];
-                if (i > halfCount)
-                {
-                    chromosome.Genes[i] = gene1;
-                    Genes[i] = gene2;
-                }
+                var temp = Genes[i];
+                Genes[i] = chromosome.Genes[i];
+                chromosome.Genes[i] = temp;
             }
         }
 
@@ -98,7 +107,7 @@ namespace hesanta.AI.GA.Domain
 
         public object Clone()
         {
-            var clone = new Chromosome<T>(NumberOfGens);
+            var clone = new Chromosome<T>(NumberOfGens, createInstanceFunc: createInstanceFunc);
             for (int i = 0; i < Genes.Count; i++)
             {
                 var gene = Genes[i];

@@ -9,6 +9,8 @@ namespace hesanta.AI.GA.Application
         where T : IGene
     {
         private readonly Random random = new Random((int)DateTime.Now.Ticks);
+        private readonly Func<int, T> createChromosomeInstanceFunc;
+        private double initialMutationRate;
 
         public event EventHandler<IChromosome<T>> OnInitializePopulationChromosome;
         public event EventHandler<(IChromosome<T>, IChromosome<T>)> OnNextPopulationSelectParents;
@@ -16,6 +18,10 @@ namespace hesanta.AI.GA.Application
         public event EventHandler<(IChromosome<T>, IChromosome<T>)> OnNextPopulationCreateChildren;
 
         public decimal Error { get; private set; }
+        public double ElitismRate { get; set; }
+        public int StaleGenerations { get; private set; } = 0;
+        public decimal BestFitness { get; private set; } = 0;
+        public int StaleGenerationThreshold { get; set; }
         public bool ThereIsSolution { get; private set; } = false;
         public int CurrentIteration { get; private set; }
         public int PopulationNumber { get; }
@@ -27,16 +33,23 @@ namespace hesanta.AI.GA.Application
         {
             get
             {
+                if (!FitnessChromosomes.Any())
+                {
+                    return null;
+                }
                 decimal maxFitness = FitnessChromosomes.Max(cf => cf.Fitness);
                 return FitnessChromosomes.FirstOrDefault(cf => cf.Fitness == maxFitness);
             }
         }
 
-        public GeneticAlgorithm(int population, int gens, Func<IChromosome<T>, decimal> fitnessFunc, decimal error = 0.001M)
+        public GeneticAlgorithm(int population, int gens, Func<IChromosome<T>, decimal> fitnessFunc, decimal error = 0.001M, double elitismRate = 0.1, int staleGenerationThreshold = 100, Func<int, T> createChromosomeInstanceFunc = null)
         {
             PopulationNumber = population;
             GensPerChromosome = gens;
             Error = error;
+            ElitismRate = elitismRate;
+            StaleGenerationThreshold = staleGenerationThreshold;
+            this.createChromosomeInstanceFunc = createChromosomeInstanceFunc;
             FitnessFunc = fitnessFunc;
         }
 
@@ -45,11 +58,16 @@ namespace hesanta.AI.GA.Application
         {
             for (int i = 0; i < PopulationNumber; i++)
             {
-                var chromosome = new Chromosome<T>(GensPerChromosome);
+                var chromosome = new Chromosome<T>(GensPerChromosome, createInstanceFunc: createChromosomeInstanceFunc);
                 chromosome.Randomize();
                 Chromosomes.Add(chromosome);
 
                 OnInitializePopulationChromosome?.Invoke(this, chromosome);
+            }
+
+            if (Chromosomes.Any())
+            {
+                initialMutationRate = Chromosomes.First().MutationRate;
             }
         }
 
@@ -61,8 +79,36 @@ namespace hesanta.AI.GA.Application
                 var fitnessValue = FitnessFunc(chromosome);
                 if (1 - fitnessValue < Error) ThereIsSolution = true;
                 var fitnessChromosome = new FitnessChromosome<T>(fitnessValue, chromosome);
-                //if (!FitnessChromosomes.Contains(fitnessChromosome))
                 FitnessChromosomes.Add(fitnessChromosome);
+            }
+
+            decimal maxFitness = FitnessChromosomes.Max(cf => cf.Fitness);
+
+            if (maxFitness > BestFitness)
+            {
+                BestFitness = maxFitness;
+                StaleGenerations = 0;
+
+                foreach (var chromosome in Chromosomes)
+                {
+                    chromosome.MutationRate = initialMutationRate;
+                }
+            }
+            else
+            {
+                StaleGenerations++;
+            }
+
+            if (StaleGenerations % StaleGenerationThreshold == 0 && StaleGenerations > 0)
+            {
+                foreach (var chromosome in Chromosomes)
+                {
+                    chromosome.MutationRate += 0.1;
+                    if (chromosome.MutationRate > 1)
+                    {
+                        chromosome.MutationRate = 1;
+                    }
+                }
             }
 
             CurrentIteration++;
@@ -76,7 +122,23 @@ namespace hesanta.AI.GA.Application
 
             OnNextPopulationSelectParents?.Invoke(this, (parentOne, parentTwo));
 
+            var eliteIndividuals = new List<IChromosome<T>>();
+            if (ElitismRate > 0)
+            {
+                int eliteCount = (int)(PopulationNumber * ElitismRate);
+                eliteIndividuals = FitnessChromosomes
+                    .OrderByDescending(fc => fc.Fitness)
+                    .Take(eliteCount)
+                    .Select(fc => fc.Chromosome)
+                    .ToList();
+            }
+
             CreateChildrenPopulation(parentOne, parentTwo);
+
+            foreach (var elite in eliteIndividuals)
+            {
+                Chromosomes.Add((IChromosome<T>)elite.Clone());
+            }
         }
 
         private void CreateChildrenPopulation(IChromosome<T> parentOne, IChromosome<T> parentTwo)

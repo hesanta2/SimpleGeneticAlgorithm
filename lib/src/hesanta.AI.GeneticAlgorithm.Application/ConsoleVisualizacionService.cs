@@ -1,5 +1,4 @@
 ﻿using hesanta.AI.GA.Domain;
-using System;
 using System.Diagnostics;
 using System.Drawing;
 using TrueColorConsole;
@@ -29,7 +28,7 @@ namespace hesanta.AI.GA.Application
             var setupTemplate = SetupTemplate();
             setupBoundingBox = setupTemplate.Item2;
             VTConsole.Write(setupTemplate.Item1, Color.WhiteSmoke);
-            iterationBoundingBox = new Point(4, setupBoundingBox.Y + 5);
+            iterationBoundingBox = new Point(4, setupBoundingBox.Y + 9);
             solutionBoundingBox = new Point(0, iterationBoundingBox.Y + 5);
 
             WriteSetup();
@@ -38,27 +37,27 @@ namespace hesanta.AI.GA.Application
 
         private void RegisterEvents()
         {
-            service.OnStart += (s, e) =>
+            service.OnAlgorithmStart += (s, e) =>
             {
                 stopWatch.Start();
                 WriteSetup();
             };
 
-            service.OnStartIterations += (s, e) =>
+            service.OnIterationStart += (s, e) =>
             {
-                WriteIteration(service.GeneticAlgorithm.CurrentIteration);
+                WriteIteration(service.AlgorithmInstance.CurrentIteration);
             };
 
-            service.OnIterate += (s, currentIteration) =>
+            service.OnIterationProcess += (s, currentIteration) =>
             {
                 //if (stopWatch.ElapsedMilliseconds % 1000 < 700 && !service.ThereIsSolution) return;
 
-                WriteIteration(service.GeneticAlgorithm.CurrentIteration);
+                WriteIteration(service.AlgorithmInstance.CurrentIteration);
             };
 
-            service.OnFinish += (s, solution) =>
+            service.OnAlgorithmComplete += (s, solution) =>
             {
-                WriteIteration(service.GeneticAlgorithm.CurrentIteration);
+                WriteIteration(service.AlgorithmInstance.CurrentIteration);
                 stopWatch.Stop();
             };
         }
@@ -66,12 +65,17 @@ namespace hesanta.AI.GA.Application
         private void WriteSetup()
         {
             Console.SetCursorPosition(setupBoundingBox.X, setupBoundingBox.Y);
-            Console.Write($"{service.MaxIterations}");
+            Console.Write($"{service.MaximumIterations}");
             Console.SetCursorPosition(setupBoundingBox.X, setupBoundingBox.Y + 1);
-            Console.Write($"{service.GeneticAlgorithm.PopulationNumber}");
+            Console.Write($"{service.AlgorithmInstance.PopulationNumber}");
             Console.SetCursorPosition(setupBoundingBox.X, setupBoundingBox.Y + 2);
-            Console.Write($"{service.GeneticAlgorithm.GensPerChromosome}");
+            Console.Write($"{service.AlgorithmInstance.GensPerChromosome}");
+            Console.SetCursorPosition(setupBoundingBox.X, setupBoundingBox.Y + 3);
+            Console.Write($"{service.AlgorithmInstance.ElitismRate}");
+            Console.SetCursorPosition(setupBoundingBox.X, setupBoundingBox.Y + 4);
+            Console.Write($"{service.AlgorithmInstance.StaleGenerationThreshold}");
         }
+
 
         private void WriteIteration(int currentIteration)
         {
@@ -85,9 +89,15 @@ namespace hesanta.AI.GA.Application
             Console.Write($"Current iteration       [{currentIteration}]");
 
             Console.SetCursorPosition(leftMargin, topPosition++);
+            Console.Write($"Stale generations       [{service.AlgorithmInstance.StaleGenerations}] ");
+
+            Console.SetCursorPosition(leftMargin, topPosition++);
+            Console.Write($"Mutation rate           [{Math.Round(service.AlgorithmInstance.BestChromosome.Chromosome.MutationRate, 2)}]   ");
+
+            Console.SetCursorPosition(leftMargin, topPosition++);
             Console.Write($"Exact solution found    [");
-            Color color = service.GeneticAlgorithm.ThereIsSolution ? Color.FromArgb(84, 255, 0) : Color.Red;
-            VTConsole.Write($"{service.GeneticAlgorithm.ThereIsSolution}", color);
+            Color color = service.AlgorithmInstance.ThereIsSolution ? Color.FromArgb(84, 255, 0) : Color.Red;
+            VTConsole.Write($"{service.AlgorithmInstance.ThereIsSolution}", color);
             VTConsole.Write("]", Color.WhiteSmoke);
 
             WriteBestSolution();
@@ -104,11 +114,11 @@ namespace hesanta.AI.GA.Application
             string centerString = new string(' ', Console.WindowWidth / 2 - toWrite.Length / 2);
             VTConsole.Write($"{centerString}BEST SOLUTION{centerString}", Color.WhiteSmoke);
 
-            Color color = ConsoleColorRtoG(service.GeneticAlgorithm.BestChromosome.Fitness);
-            toWrite = $"[{Math.Round(service.GeneticAlgorithm.BestChromosome.Fitness, 4)}]";
+            Color color = ConsoleColorRtoG(service.AlgorithmInstance.BestChromosome.Fitness);
+            toWrite = $"[{Math.Round(service.AlgorithmInstance.BestChromosome.Fitness, 4)}]";
             WriteCentered(toWrite, color);
 
-            var bestSolutionChromosome = service.GeneticAlgorithm.BestChromosome.Chromosome;
+            var bestSolutionChromosome = service.AlgorithmInstance.BestChromosome.Chromosome;
             toWrite = $"{(chromosomeToString == null ? bestSolutionChromosome.ToString() : chromosomeToString(bestSolutionChromosome))}";
             WriteCentered("");
             WriteCentered(toWrite);
@@ -125,21 +135,24 @@ namespace hesanta.AI.GA.Application
             {
                 centerString = "";
             }
-            VTConsole.Write($"{centerString}{toWrite}{centerString}", color ?? Color.WhiteSmoke );
+            VTConsole.Write($"{centerString}{toWrite}{centerString}", color ?? Color.WhiteSmoke);
         }
 
         private (string, Point) SetupTemplate()
         {
             return ($@"
-    ╔═══════════════════════════╗
-    ║           SETUP           ║
-    ╠═══════════════════════════╣
-    ║ Max iterations:           ║
-    ║ Population    :           ║
-    ║ Genes         :           ║
-    ╚═══════════════════════════╝
-", new Point(23, 4));
+    ╔════════════════════════════════════════╗
+    ║                   SETUP                ║
+    ╠════════════════════════════════════════╣
+    ║ Max iterations :                       ║
+    ║ Population     :                       ║
+    ║ Genes          :                       ║
+    ║ Elitism rate   :                       ║
+    ║ Stale threshold:                       ║
+    ╚════════════════════════════════════════╝
+", new Point(32, 4));
         }
+
 
         private Color ConsoleColorRtoG(decimal percentage)
         {

@@ -6,15 +6,15 @@ namespace hesanta.AI.GA.Application
     public interface IGeneticAlgorithmProcessor<T>
         where T : IGene
     {
-        event EventHandler OnStart;
-        event EventHandler<IFitnessChromosome<T>> OnFinish;
-        event EventHandler<int> OnIterate;
-        event EventHandler OnStartIterations;
+        event EventHandler OnAlgorithmStart;
+        event EventHandler<IFitnessChromosome<T>> OnAlgorithmComplete;
+        event EventHandler<int> OnIterationProcess;
+        event EventHandler OnIterationStart;
 
-        IGeneticAlgorithm<T> GeneticAlgorithm { get; }
+        IGeneticAlgorithm<T> AlgorithmInstance { get; }
 
-        int MaxIterations { get; }
+        int MaximumIterations { get; }
 
-        IFitnessChromosome<T> GetIterateSolution(int maxIterations = 100);
+        Task<IFitnessChromosome<T>> ComputeIterativeSolutionAsync(int maxIterations = 100);
     }
 }

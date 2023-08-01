@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace hesanta.AI.GA.Domain
+﻿namespace hesanta.AI.GA.Domain
 {
     public class FitnessChromosome<T> : IFitnessChromosome<T>
         where T : IGene

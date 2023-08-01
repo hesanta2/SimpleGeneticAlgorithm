@@ -1,6 +1,4 @@
 ﻿using hesanta.AI.GA.Domain;
-using System;
-using System.Collections.Generic;
 
 namespace hesanta.AI.GA.Application
 {
@@ -19,6 +17,9 @@ namespace hesanta.AI.GA.Application
         int CurrentIteration { get; }
         ICollection<IFitnessChromosome<T>> FitnessChromosomes { get; }
         int GensPerChromosome { get; }
+        int StaleGenerationThreshold { get; set; }
+        int StaleGenerations { get; }
+        double ElitismRate { get; set; }
 
         void InitializePopulation();
         void EvaluateFitness();
